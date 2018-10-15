@@ -129,10 +129,10 @@ func Load(b *[]byte) (*BloomFilter, error) {
 		return nil, errors.New("invaled data")
 	}
 	numHash := int((*b)[1])
-	length := binary.BigEndian.Uint64((*b)[2:10])
+	length := binary.BigEndian.Uint32((*b)[2:6])
 	data := make([]uint64, length)
 	for i := 0; i < int(length); i++ {
-		j := (i * 8) + 11
+		j := (i * 8) + 6
 		data[i] = binary.BigEndian.Uint64((*b)[j : j+8])
 	}
 	bits := LoadLockFreeBitmap(&data)
