@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"math"
 
-	"github.com/Dai0522/go-hash/hash"
+	"github.com/Dai0522/go-hash/murmur3"
 )
 
 // Strategy .
@@ -15,12 +15,13 @@ type Strategy interface {
 
 // Murur3_128Strategy .
 type Murur3_128Strategy struct {
+	hashFunc *murmur3.Murmur3
 }
 
 // Put .
 func (s *Murur3_128Strategy) Put(b []byte, n int, bits Bitmap) bool {
 	bitSize := bits.BitSize()
-	hashCode := hash.Murmur3.Murmur3_128(b)
+	hashCode := s.hashFunc.Murmur3_128(b)
 	h1 := binary.LittleEndian.Uint64(hashCode[:8])
 	h2 := binary.LittleEndian.Uint64(hashCode[8:])
 
@@ -37,7 +38,7 @@ func (s *Murur3_128Strategy) Put(b []byte, n int, bits Bitmap) bool {
 // MightContain .
 func (s *Murur3_128Strategy) MightContain(b []byte, n int, bits Bitmap) bool {
 	bitSize := bits.BitSize()
-	hashCode := hash.Murmur3.Murmur3_128(b)
+	hashCode := s.hashFunc.Murmur3_128(b)
 	h1 := binary.LittleEndian.Uint64(hashCode[:8])
 	h2 := binary.LittleEndian.Uint64(hashCode[8:])
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/Dai0522/go-hash/hash/bloomfilter"
+	"github.com/Dai0522/go-hash/bloomfilter"
 )
 
 func main() {
@@ -15,7 +15,6 @@ func main() {
 	bf, _ := bloomfilter.Load(&b)
 
 	// bf, _ := bloomfilter.New(100000, 0.0001)
-
 	// for i := 0; i < 100000; i++ {
 	// 	bf.PutUint64(uint64(i))
 	// }

@@ -5,6 +5,8 @@ import (
 	"encoding/binary"
 	"errors"
 	"math"
+
+	"github.com/Dai0522/go-hash/murmur3"
 )
 
 // BloomFilter .
@@ -22,9 +24,11 @@ func New(expect uint64, fpp float64) (*BloomFilter, error) {
 		return nil, err
 	}
 	return &BloomFilter{
-		strategy: &Murur3_128Strategy{},
-		bits:     b,
-		numHash:  optimalNumOfHash(expect, m),
+		strategy: &Murur3_128Strategy{
+			hashFunc: murmur3.New(),
+		},
+		bits:    b,
+		numHash: optimalNumOfHash(expect, m),
 	}, nil
 }
 
@@ -138,9 +142,11 @@ func Load(b *[]byte) (*BloomFilter, error) {
 	bits := LoadLockFreeBitmap(&data)
 
 	bf := &BloomFilter{
-		strategy: &Murur3_128Strategy{},
-		bits:     bits,
-		numHash:  numHash,
+		strategy: &Murur3_128Strategy{
+			hashFunc: murmur3.New(),
+		},
+		bits:    bits,
+		numHash: numHash,
 	}
 	return bf, nil
 }
