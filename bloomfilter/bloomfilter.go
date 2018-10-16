@@ -112,11 +112,11 @@ func (bf *BloomFilter) Serialized() *[]byte {
 	buf.WriteByte(byte(1))
 	buf.WriteByte(byte(bf.numHash))
 
-	dataBuf := make([]byte, 8)
-	size := bf.bits.Size()
-	binary.BigEndian.PutUint64(dataBuf, size)
-	buf.Write(dataBuf)
+	size := make([]byte, 4)
+	binary.BigEndian.PutUint32(size, bf.bits.Size())
+	buf.Write(size)
 
+	dataBuf := make([]byte, 8)
 	data := *bf.bits.Data()
 	for _, v := range data {
 		binary.BigEndian.PutUint64(dataBuf, v)

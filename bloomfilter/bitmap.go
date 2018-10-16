@@ -17,7 +17,7 @@ type Bitmap interface {
 	Get(uint64) bool
 	BitSize() uint64
 	BitCount() uint64
-	Size() uint64
+	Size() uint32
 	Data() *[]uint64
 }
 
@@ -93,8 +93,8 @@ func (bits *LockFreeBitmap) BitCount() uint64 {
 }
 
 // Size .
-func (bits *LockFreeBitmap) Size() uint64 {
-	return uint64(len(bits.data))
+func (bits *LockFreeBitmap) Size() uint32 {
+	return uint32(len(bits.data))
 }
 
 // Data .
