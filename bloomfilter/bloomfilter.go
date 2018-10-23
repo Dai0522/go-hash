@@ -151,6 +151,12 @@ func Load(b *[]byte) (*BloomFilter, error) {
 	return bf, nil
 }
 
+// Merge return bloom filter ptr
+func Merge(src *BloomFilter, dst *BloomFilter) *BloomFilter {
+	dst.bits.Merge(src.bits.Data())
+	return dst
+}
+
 func optimalNumOfHash(n, m uint64) int {
 	return int(math.Max(1, math.Floor((float64(m/n)*math.Log(2))+0.5)))
 }

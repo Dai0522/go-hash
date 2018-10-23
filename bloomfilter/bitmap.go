@@ -19,6 +19,7 @@ type Bitmap interface {
 	BitCount() uint64
 	Size() uint32
 	Data() *[]uint64
+	Merge(*[]uint64) bool
 }
 
 // LockFreeBitmap .
@@ -100,6 +101,26 @@ func (bits *LockFreeBitmap) Size() uint32 {
 // Data .
 func (bits *LockFreeBitmap) Data() *[]uint64 {
 	return &bits.data
+}
+
+// Merge .
+func (bits *LockFreeBitmap) Merge(data *[]uint64) bool {
+	if len(bits.data) != len(*data) {
+		return false
+	}
+	for i := 0; i < len(bits.data); i++ {
+		for {
+			old := bits.data[i]
+			new := bits.data[i] | (*data)[i]
+			if old == new {
+				break
+			}
+			if atomic.CompareAndSwapUint64(&bits.data[i], old, new) {
+				break
+			}
+		}
+	}
+	return true
 }
 
 func bitCount(i uint64) uint64 {
