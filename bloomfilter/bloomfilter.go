@@ -151,8 +151,12 @@ func Load(b *[]byte) (*BloomFilter, error) {
 	return bf, nil
 }
 
-// Merge return bloom filter ptr
+// Merge return dst bloom filter ptr
 func Merge(src *BloomFilter, dst *BloomFilter) *BloomFilter {
+	if src == nil || dst == nil {
+		return dst
+	}
+
 	dst.bits.Merge(src.bits.Data())
 	return dst
 }
