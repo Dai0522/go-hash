@@ -27,6 +27,20 @@ var hashWord2Tests = []struct {
 	{[]uint32{1, 2, 3, 4, 5}, 5, 0, 1, 0x7489c25b, 0x898e47dd},
 }
 
+var hashLittleTests = []struct {
+	key       string
+	keyLength uint32
+	initValue uint32
+	hash      uint32
+}{
+	{"Four score and seven years ago", 30, 0, 0x17770551},
+	{"Four score and seven years ago", 30, 1, 0xcd628161},
+	{"hello world", 11, 0, 0x4aa94e65},
+	{"hello world", 11, 1, 0x14973b58},
+	{string(byte(1)), 1, 0, 0x04ec883b},
+	{string(byte(1)), 1, 1, 0xaf758ef3},
+}
+
 func TestHashWord(t *testing.T) {
 	for _, tt := range hashWordTests {
 		h := hash32(tt.initValue, tt.key)
@@ -43,6 +57,16 @@ func TestHashWord2(t *testing.T) {
 		if c != tt.cOut || b != tt.bOut {
 			t.Errorf("hash64(%d, %d, %q) => (0x%08x, 0x%08x), want (0x%08x, 0x%08x)\n",
 				tt.cIn, tt.bIn, tt.key, c, b, tt.cOut, tt.bOut)
+		}
+	}
+}
+
+func TestHashLittle(t *testing.T) {
+	for _, tt := range hashLittleTests {
+		h := hashLittle32(tt.initValue, []byte(tt.key))
+		if h != tt.hash {
+			t.Errorf("HashLittle(%d, '%s') => 0x%08x, want 0x%08x", tt.initValue, tt.key,
+				h, tt.hash)
 		}
 	}
 }
