@@ -19,12 +19,17 @@ func NewWithSeed(s uint32) *Murmur3 {
 
 // Murmur3_32 .
 func (h *Murmur3) Murmur3_32(b []byte) []byte {
-	return murmur3_32(h.seed, b)
+	h1 := murmur3_32(h.seed, b)
+	return []byte{byte(h1), byte(h1 >> 8), byte(h1 >> 16), byte(h1 >> 24)}
 }
 
 // Murmur3_64 .
 func (h *Murmur3) Murmur3_64(b []byte) []byte {
-	return murmur3_64(h.seed, b)
+	h1 := murmur3_64(h.seed, b)
+	return []byte{
+		byte(h1), byte(h1 >> 8), byte(h1 >> 16), byte(h1 >> 24),
+		byte(h1 >> 32), byte(h1 >> 40), byte(h1 >> 48), byte(h1 >> 56),
+	}
 }
 
 // Murmur3_128 little endian []byte.
