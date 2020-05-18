@@ -78,7 +78,7 @@ func TestLockFreeBitmap_Merge(t *testing.T) {
 			t.Errorf("LockFreeBitmap_Merge before Get [%v], actually: [%v]", unit, ac)
 		}
 	}
-	if ac := bits.Merge(&tmp.data); ac != true {
+	if ac := bits.Merge(tmp.data); ac != true {
 		t.Errorf("LockFreeBitmap_Merge error src cap[%v], actually: [%v]", len(bits.data), ac)
 	}
 	for _, unit := range []struct {
@@ -99,7 +99,7 @@ func TestLockFreeBitmap_Merge(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	if ac := bits.Merge(&empty.data); ac != false {
+	if ac := bits.Merge(empty.data); ac != false {
 		t.Errorf("LockFreeBitmap_Merge error src cap[%v], actually: [%v]", len(bits.data), ac)
 	}
 }

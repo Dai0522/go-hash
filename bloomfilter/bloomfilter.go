@@ -102,7 +102,7 @@ func (bf *BloomFilter) ApproximateElementCount() int {
 }
 
 // Serialized serialized bloom filter
-func (bf *BloomFilter) Serialized() *[]byte {
+func (bf *BloomFilter) Serialized() []byte {
 	// Serial form:
 	// 1 signed byte for the strategy
 	// 1 unsigned byte for the number of hash functions
@@ -117,29 +117,29 @@ func (bf *BloomFilter) Serialized() *[]byte {
 	buf.Write(size)
 
 	dataBuf := make([]byte, 8)
-	data := *bf.bits.Data()
+	data := bf.bits.Data()
 	for _, v := range data {
 		binary.BigEndian.PutUint64(dataBuf, v)
 		buf.Write(dataBuf)
 	}
 
 	res := buf.Bytes()
-	return &res
+	return res
 }
 
 // Load load serialized bloom filter into memory
-func Load(b *[]byte) (*BloomFilter, error) {
-	if len(*b) < 10 {
+func Load(b []byte) (*BloomFilter, error) {
+	if len(b) < 10 {
 		return nil, errors.New("invaled data")
 	}
-	numHash := int((*b)[1])
-	length := binary.BigEndian.Uint32((*b)[2:6])
+	numHash := int((b)[1])
+	length := binary.BigEndian.Uint32((b)[2:6])
 	data := make([]uint64, length)
 	for i := 0; i < int(length); i++ {
 		j := (i * 8) + 6
-		data[i] = binary.BigEndian.Uint64((*b)[j : j+8])
+		data[i] = binary.BigEndian.Uint64((b)[j : j+8])
 	}
-	bits := LoadLockFreeBitmap(&data)
+	bits := LoadLockFreeBitmap(data)
 
 	bf := &BloomFilter{
 		strategy: &Murur3_128Strategy{

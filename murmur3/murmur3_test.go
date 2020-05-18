@@ -3,6 +3,8 @@ package murmur3
 import (
 	"strconv"
 	"testing"
+
+	"github.com/vcaesar/tt"
 )
 
 var data = []struct {
@@ -59,4 +61,17 @@ func BenchmarkMurmur3_128(b *testing.B) {
 			}
 		})
 	}
+}
+
+var (
+	testText = "The quick brown fox jumps over the lazy dog"
+	text2    = "The quick brown fox jumps over the lazy cog"
+)
+
+func Benchmark_Murmur3_128(b *testing.B) {
+	fn := func() {
+		murmur3_128(0, []byte(testText))
+	}
+
+	tt.BM(b, fn)
 }
